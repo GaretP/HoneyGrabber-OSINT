@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>HoneyGrabber OSINT</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="logo.png" alt="HoneyGrabber Logo">
+      <h1>HoneyGrabber</h1>
+      <p>An open-source OSINT tool that performs username sweeps, alias matching, and social graph mapping using public data. Enter a target's information below to begin the scan.</p>
+    </header>
+
+    <label>First Name:<input id="first" placeholder="e.g. Alex"></label>
+    <label>Middle Name:<input id="middle" placeholder="(Optional)"></label>
+    <label>Last Name:<input id="last" placeholder="e.g. Sanchez"></label>
+    <label>Alias:<input id="alias" placeholder="e.g. CyberWolf"></label>
+    <label>Email:<input id="email" placeholder="(Optional)"></label>
+    <label>Location:<input id="location" placeholder="(Optional)"></label>
+
+    <button onclick="runFullScan()">🚀 Run Full Scan</button>
+
+    <details>
+      <summary>Run Individual Modules</summary>
+      <button onclick="runOSINT()">🔍 OSINT Sweep</button>
+      <button onclick="runRecords()">📁 Records Lookup</button>
+      <button onclick="runAvatarLookup()">🖼️ Avatar Lookup</button>
+      <button onclick="runFriendMap()">👥 Map Friends</button>
+      <button onclick="runReverseLookup()">🔁 Reverse Lookup</button>
+      <button onclick="runSearchEngine()">🌐 Search Engine Scan</button>
+    </details>
+
+    <h3>Results:</h3>
+    <textarea id="output" readonly></textarea>
+  </div>
+
+  <script src="osint.js"></script>
+  <script src="records.js"></script>
+  <script src="avatarlookup.js"></script>
+  <script src="friendmap.js"></script>
+  <script src="reverselookup.js"></script>
+  <script src="searchengine.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
