@@ -10,32 +10,57 @@
     <header>
       <img src="logo.png" alt="HoneyGrabber Logo">
       <h1>HoneyGrabber</h1>
-      <p>An open-source OSINT tool that performs username sweeps, alias matching, and social graph mapping using public data. Enter a target's information below to begin the scan.</p>
+      <p>An open-source OSINT tool.</p>
     </header>
 
-    <label>First Name:<input id="first" placeholder="e.g. Alex"></label>
-    <label>Middle Name:<input id="middle" placeholder="(Optional)"></label>
-    <label>Last Name:<input id="last" placeholder="e.g. Sanchez"></label>
-    <label>Alias:<input id="alias" placeholder="e.g. CyberWolf"></label>
-    <label>Email:<input id="email" placeholder="(Optional)"></label>
-    <label>Location:<input id="location" placeholder="(Optional)"></label>
+    <!-- Card 1: Purpose -->
+    <div class="index-card">
+      <h2>Step 1: What's the purpose of this search?</h2>
+      <label><input type="text" id="purpose" placeholder="e.g. Investigating a lead, verifying identity, etc."></label>
+      <div class="card-buttons">
+        <button class="next-btn">Next</button>
+      </div>
+    </div>
 
-    <button onclick="runFullScan()">🚀 Run Full Scan</button>
+    <!-- Card 2: Name Info -->
+    <div class="index-card">
+      <h2>Step 2: Basic Identity Info</h2>
+      <label>First Name:<input id="first" placeholder="e.g. Alex" required></label>
+      <label>Middle Name:<input id="middle" placeholder="(Optional)"></label>
+      <label>Last Name:<input id="last" placeholder="e.g. Sanchez" required></label>
+      <label>Alias:<input id="alias" placeholder="e.g. CyberWolf"></label>
+      <div class="card-buttons">
+	<button class="back-btn">Back</button>
+	<button class="next-btn">Next</button>
+      </div>
+    </div>
 
-    <details>
-      <summary>Run Individual Modules</summary>
-      <button onclick="runOSINT()">🔍 OSINT Sweep</button>
-      <button onclick="runRecords()">📁 Records Lookup</button>
-      <button onclick="runAvatarLookup()">🖼️ Avatar Lookup</button>
-      <button onclick="runFriendMap()">👥 Map Friends</button>
-      <button onclick="runReverseLookup()">🔁 Reverse Lookup</button>
-      <button onclick="runSearchEngine()">🌐 Search Engine Scan</button>
-    </details>
+    <!-- Card 3: Contact Info -->
+    <div class="index-card">
+      <h2>Step 3: Additional Info</h2>
+      <label>Email:<input id="email" placeholder="(Optional)"></label>
+      <label>Location:<input id="location" placeholder="(Optional)"></label>
+      <label>Phone:<input id="phone" placeholder="(Optional)"></label>
+      <div class="card-buttons">
+        <button class="back-btn">Back</button>
+	<button class="next-btn">Next</button>
+      </div>
+    </div>
 
-    <h3>Results:</h3>
-    <textarea id="output" readonly></textarea>
+    <!-- Card 4: Output Summary -->
+    <div class="index-card" id="output-card">
+      <h2>Final Results</h2>
+      <p>Scan complete:</p>
+      <div id="ai-profile" class="profile-box"></div>
+      <h3>Raw Scan Output:</h3>
+      <textarea id="output" readonly></textarea>
+      <div class="card-buttons">
+        <button id="back-btn">Back</button>
+      </div>
+    </div>
   </div>
 
+  <!-- WASM Module Scripts -->
   <script src="osint.js"></script>
   <script src="records.js"></script>
   <script src="avatarlookup.js"></script>
@@ -45,3 +70,6 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+
+
