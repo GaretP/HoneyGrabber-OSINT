@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const cards = document.querySelectorAll('.index-card');
   const outputBox = document.getElementById('output-card');
+  const outputTextArea = document.getElementById('output');
 
   function showCard(index) {
     cards.forEach((card, i) => {
@@ -61,10 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
+  // UPDATED: pass 6 args to match C signature (first, middle, last, alias, email, location)
   function runRecords() {
     const input = getInputValues();
-    const full = (input.first + ' ' + input.last).trim();
-    return ccallSafe(window.RecordsModule, 'search_records', 'string', ['string'], [full]);
+    return ccallSafe(
+      window.RecordsModule,
+      'search_records',
+      'string',
+      ['string','string','string','string','string','string'],
+      [input.first, input.middle, input.last, input.alias, input.email, input.location]
+    );
   }
 
   function runAvatarLookup() {
@@ -74,21 +81,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function runFriendMap() {
     const input = getInputValues();
-    return ccallSafe(window.FriendMapModule, 'friend_map', 'string', ['string', 'string'], [input.alias, input.email]);
+    const username = (input.alias && input.alias.trim())
+      ? input.alias.trim()
+      : (input.first + input.last).toLowerCase().replace(/\s+/g, '');
+
+    const platforms = ['instagram', 'twitter', 'tiktok', 'steam', 'github'];
+    let combined = '';
+
+    for (const p of platforms) {
+      const res = ccallSafe(
+        window.FriendMapModule,
+        'friend_map',
+        'string',
+        ['string','string'],
+        [p, username]
+      );
+
+      if (typeof res === 'string' && !/Unsupported platform/i.test(res)) {
+        combined += (combined ? '\n' : '') + `[# ${p.toUpperCase()}]\n` + res + '\n';
+      }
+    }
+
+    if (!combined) {
+      return '⚠️ No supported platform matched. Add an alias or choose a specific platform.';
+    }
+    return combined;
   }
 
+  // UPDATED: reverse_lookup(email, first, last, location)
   function runReverseLookup() {
     const input = getInputValues();
-    return ccallSafe(window.ReverseLookupModule, 'reverse_lookup', 'string', ['string', 'string', 'string'], [input.email, input.alias, input.location]);
+    return ccallSafe(
+      window.ReverseLookupModule,
+      'reverse_lookup',
+      'string',
+      ['string','string','string','string'],
+      [input.email, input.first, input.last, input.location]
+    );
   }
 
+  // UPDATED: likely expects first, last, alias
   function runSearchEngine() {
     const input = getInputValues();
-    const full = (input.first + ' ' + input.last).trim();
-    return ccallSafe(window.SearchModule, 'search_engines', 'string', ['string', 'string'], [full, input.alias]);
+    return ccallSafe(
+      window.SearchModule,
+      'search_engines',
+      'string',
+      ['string','string','string'],
+      [input.first, input.last, input.alias]
+    );
   }
 
   function runFullScan() {
+    // Guard: ensure first & last before modules that require them
+    const { first, last } = getInputValues();
+    if (!first?.trim() || !last?.trim()) {
+      const out = document.getElementById('output');
+      if (out) out.value = '❌ Please provide at least First and Last name before running the scan.';
+      showCard(1); // typically the name card index
+      return;
+    }
+
     showSpinner(true);
     setTimeout(() => {
       let result = '=== HONEYGRABBER FULL SCAN ===\n';
